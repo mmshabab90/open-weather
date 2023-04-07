@@ -1,14 +1,16 @@
 import React, { FC, ReactElement } from "react"
 import useWeather from "../hooks/useWeather"
 import Spinner from "./Spinner"
+import { weatherDataType } from "../types"
 
 interface Props {
     lat: number
     lon: number
     unit: string
+    onCardClick: (e: weatherDataType) => void
 }
 
-const WeatherOverviewCard: FC<Props> = ({ lat, lon, unit }) => {
+const WeatherOverviewCard: FC<Props> = ({ lat, lon, unit, onCardClick }) => {
     const { weatherData, errorWeatherMessage } = useWeather(lat, lon, unit)
 
     if (!weatherData) {
@@ -37,7 +39,10 @@ const WeatherOverviewCard: FC<Props> = ({ lat, lon, unit }) => {
     }
 
     return (
-        <section className="w-full flex-auto md:w-1/3 xl:w-1/3 p-1 rounded">
+        <section
+            className="w-full flex-auto md:w-1/3 xl:w-1/3 p-1 rounded cursor-pointer"
+            onClick={() => onCardClick(weatherData)}
+        >
             <div className="bg-gradient-to-br from-blue-100 to-purple-100 border rounded shadow-xl p-2">
                 <div className="flex flex-row items-center">
                     <div className="flex-shrink pr-1">

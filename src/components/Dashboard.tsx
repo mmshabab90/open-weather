@@ -11,16 +11,13 @@ const Dashboard: FC = () => {
     const [options, setOptions] = useState<optionType[] | []>([])
     const [errorMessage, setErrorMessage] = useState<errorType | null>(null)
     const [city, setCity] = useState<optionType | null>(null)
-    const [unit, setUnit] = useState<{ key: string; value: string }>({
+    const [unit, setUnit] = useState<{
+        key: string | null
+        value: string | null
+    }>({
         key: "unit",
-        value: "metric",
+        value: localStorage.getItem("unit"),
     })
-
-    const { weatherData, errorWeatherMessage } = useWeather(
-        city && city.lat,
-        city && city.lon,
-        unit.value
-    )
 
     const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
@@ -115,6 +112,7 @@ const Dashboard: FC = () => {
                                 lat={l.latitude}
                                 lon={l.longitude}
                                 unit={unit.value}
+                                onCardClick={(e) => console.log(e)}
                             />
                         ))}
                 </div>
