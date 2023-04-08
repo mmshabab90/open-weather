@@ -12,16 +12,16 @@ interface Props {
 }
 
 const WeatherOverviewCard: FC<Props> = ({ lat, lon, unit, onCardClick }) => {
-    const { loading, weatherData, errorWeatherMessage } = useWeather(
+    const { loadingWeather, weatherData, errorWeatherMessage } = useWeather(
         lat,
         lon,
         unit
     )
 
-    if (loading) {
+    if (loadingWeather) {
         return (
             <Container>
-                <Spinner />
+                <Spinner>Loading weather data</Spinner>
             </Container>
         )
     }

@@ -7,12 +7,12 @@ const useForecast = (
     unit: string | null
 ) => {
     const [forecastData, setForecastData] = useState<forecastType | null>(null)
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loadingForecast, setLoadingForecast] = useState<boolean>(false)
     const [errorForecastMessage, setErrorForecastMessage] =
         useState<errorType | null>(null)
 
     useEffect(() => {
-        setLoading(true)
+        setLoadingForecast(true)
         if (lat && lon) {
             fetch(
                 `${process.env.REACT_APP_WEATHER_API_BASE_URL}/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${unit}&appid=${process.env.REACT_APP_API_KEY}`
@@ -20,7 +20,7 @@ const useForecast = (
                 .then((res) => res.json())
                 .then((data) => {
                     setForecastData(data)
-                    setLoading(false)
+                    setLoadingForecast(false)
                 })
                 .catch((error) =>
                     setErrorForecastMessage({
@@ -33,11 +33,11 @@ const useForecast = (
         return () => {
             setForecastData(null)
             setErrorForecastMessage(null)
-            setLoading(false)
+            setLoadingForecast(false)
         }
     }, [unit, lat, lon])
 
-    return { forecastData, errorForecastMessage, loading }
+    return { forecastData, errorForecastMessage, loadingForecast }
 }
 
 export default useForecast

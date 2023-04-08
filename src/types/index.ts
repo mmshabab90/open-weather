@@ -61,9 +61,13 @@ type listType = {
     dt: number
     main: mainType
     weather: weatherType[]
+    clouds: {
+        all: number
+    }
     wind: windType
     visibility: number
     dt_txt: string
+    pop: number
 }
 
 export type forecastType = {

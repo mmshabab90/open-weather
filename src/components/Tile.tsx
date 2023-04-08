@@ -1,5 +1,11 @@
 import React, { FC, ReactElement } from "react"
-import { WiStrongWind, WiThermometer, WiHumidity } from "react-icons/wi"
+import {
+    WiStrongWind,
+    WiThermometer,
+    WiHumidity,
+    WiSunrise,
+    WiSunset,
+} from "react-icons/wi"
 import { FaEye } from "react-icons/fa"
 import { IoWater, IoSpeedometerOutline } from "react-icons/io5"
 
@@ -10,6 +16,8 @@ type iconType =
     | "visibility"
     | "pressure"
     | "pop"
+    | "sunrise"
+    | "sunset"
 
 interface Props {
     icon: iconType
@@ -25,6 +33,8 @@ const icons = {
     visibility: <FaEye />,
     pressure: <IoSpeedometerOutline />,
     pop: <IoWater />,
+    sunrise: <WiSunrise />,
+    sunset: <WiSunset />,
 }
 
 const Tile: FC<Props> = ({ icon, title, info, description }) => {

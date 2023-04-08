@@ -28,12 +28,12 @@ const Dashboard: FC = () => {
     const [data, setData] = useState<WeatherAndForecastData | null>(null)
 
     const randomdLocation = useRandomLocationGenerator()
-    const { weatherData, errorWeatherMessage } = useWeather(
+    const { loadingWeather, weatherData, errorWeatherMessage } = useWeather(
         city?.lat,
         city?.lon,
         unit.value
     )
-    const { forecastData, errorForecastMessage } = useForecast(
+    const { loadingForecast, forecastData, errorForecastMessage } = useForecast(
         city?.lat,
         city?.lon,
         unit.value
@@ -101,11 +101,12 @@ const Dashboard: FC = () => {
         navigator.geolocation.getCurrentPosition(
             function (position) {
                 setCityData(
-                    "User Location",
-                    "User Country",
+                    "",
+                    "",
                     position.coords.latitude,
                     position.coords.longitude
                 )
+                setOptions([])
             },
             function (error) {
                 setErrorMessage({
@@ -126,7 +127,7 @@ const Dashboard: FC = () => {
     }
 
     return (
-        <section className="w-full md:max-w-[1060px] p-4 flex flex-col text-center items-center justify-start md:px-10 h-full lg:h-[800px] bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
+        <section className="w-full flex flex-col text-center items-center justify-start md:px-10 h-[100vh] bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
             <Header onUnitChange={onUnitChange} />
             <section className="mb-10">
                 <Search
@@ -138,10 +139,17 @@ const Dashboard: FC = () => {
                     getUserLocation={getUserLocation}
                 />
             </section>
-            <section className="z-0 p-4 leading-normal text-center items-center justify-center md:px-10 h-auto w-auto bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
-                {weatherData && forecastData ? (
-                    <Forecast onBackClick={() => setCity(null)} />
-                ) : (
+            {weatherData && forecastData ? (
+                <Forecast
+                    onBackClick={() => setCity(null)}
+                    weatherData={weatherData}
+                    forecastData={forecastData}
+                    loadingWeather={loadingWeather}
+                    loadingForecast={loadingForecast}
+                    unit={unit.value}
+                />
+            ) : (
+                <section className="leading-normal text-center items-center justify-center md:px-10 w-full h-full bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
                     <div className="flex flex-wrap justify-between">
                         {randomdLocation &&
                             randomdLocation.map((l) => (
@@ -161,8 +169,8 @@ const Dashboard: FC = () => {
                                 />
                             ))}
                     </div>
-                )}
-            </section>
+                </section>
+            )}
         </section>
     )
 }

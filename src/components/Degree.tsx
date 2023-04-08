@@ -2,7 +2,7 @@ import React, { FC } from "react"
 
 interface Prop {
     temp?: number
-    unit?: string
+    unit?: string | null
 }
 const Degree: FC<Prop> = ({ temp, unit }) => {
     return (
