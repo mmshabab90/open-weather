@@ -43,12 +43,14 @@ const Forecast: FC<Props> = ({
             </div>
             <div className="mx-auto w-full p-2 bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg  bg-gradient-to-br from-teal-100 via-green-100 to-red-100">
                 <section className="text-center">
-                    <h2 className="text-2xl font-black">
-                        <span className="font-thin">
-                            {forecastData.city.name},{" "}
-                            {forecastData.city.country}
-                        </span>
-                    </h2>
+                    {forecastData.city.name && forecastData.city.country ? (
+                        <h2 className="text-2xl font-black">
+                            <span className="font-thin">
+                                {forecastData.city.name},{" "}
+                                {forecastData.city.country}
+                            </span>
+                        </h2>
+                    ) : null}
                     <h1 className="text-4xl font-extrabold">
                         <Degree
                             temp={Math.round(data.main.temp)}
