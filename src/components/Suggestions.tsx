@@ -6,7 +6,7 @@ type componentProps = {
 }
 
 const Suggestions = ({ options, onSelect }: componentProps): JSX.Element => (
-    <ul className="absolute top-9 bg-white rounded-b-md w-full z-50">
+    <ul className="absolute top-9 bg-white rounded-b-md w-full z-100">
         {options.map((option: optionType, index: number) => (
             <li key={option.name + "-" + index}>
                 <button

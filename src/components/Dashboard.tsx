@@ -1,17 +1,12 @@
 import React, { ChangeEvent, FC, useState } from "react"
 import Header from "./Header"
 import Search from "./Search"
-import { errorType, forecastType, optionType, weatherDataType } from "../types"
+import { errorType, optionType } from "../types"
 import useWeather from "../hooks/useWeather"
 import WeatherOverviewCard from "./WeatherOverviewCard"
 import useRandomLocationGenerator from "../hooks/useRandomLocationGenrator"
 import useForecast from "../hooks/useForecast"
 import Forecast from "./Forecast"
-
-interface WeatherAndForecastData {
-    weatherData: weatherDataType
-    forecastData: forecastType
-}
 
 const Dashboard: FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>("")
@@ -25,15 +20,14 @@ const Dashboard: FC = () => {
         key: "unit",
         value: localStorage.getItem("unit"),
     })
-    const [data, setData] = useState<WeatherAndForecastData | null>(null)
 
     const randomdLocation = useRandomLocationGenerator()
-    const { loadingWeather, weatherData, errorWeatherMessage } = useWeather(
+    const { loadingWeather, weatherData } = useWeather(
         city?.lat,
         city?.lon,
         unit.value
     )
-    const { loadingForecast, forecastData, errorForecastMessage } = useForecast(
+    const { loadingForecast, forecastData } = useForecast(
         city?.lat,
         city?.lon,
         unit.value
@@ -71,10 +65,6 @@ const Dashboard: FC = () => {
         setSearchTerm(option.name)
         setCity(option)
         setOptions([])
-    }
-
-    const onSubmit = () => {
-        if (!city) return
     }
 
     const setCityData = (
@@ -127,18 +117,7 @@ const Dashboard: FC = () => {
     }
 
     return (
-        <section className="w-full flex flex-col text-center items-center justify-start md:px-10 h-[100vh] bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
-            <Header onUnitChange={onUnitChange} />
-            <section className="mb-10">
-                <Search
-                    term={searchTerm}
-                    options={options}
-                    onInputChange={onSearchInputChange}
-                    onOptionSelect={onOptionSelect}
-                    onSubmit={onSubmit}
-                    getUserLocation={getUserLocation}
-                />
-            </section>
+        <main className="h-[100vh] w-full flex flex-col items-center bg-white">
             {weatherData && forecastData ? (
                 <Forecast
                     onBackClick={() => setCity(null)}
@@ -147,31 +126,55 @@ const Dashboard: FC = () => {
                     loadingWeather={loadingWeather}
                     loadingForecast={loadingForecast}
                     unit={unit.value}
+                    onUnitChange={onUnitChange}
                 />
             ) : (
-                <section className="leading-normal text-center items-center justify-center md:px-10 w-full h-full bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
-                    <div className="flex flex-wrap justify-between">
-                        {randomdLocation &&
-                            randomdLocation.map((l) => (
-                                <WeatherOverviewCard
-                                    key={`${l.id}-${l.zip}`}
-                                    lat={l.latitude}
-                                    lon={l.longitude}
-                                    unit={unit.value}
-                                    onCardClick={(e) =>
-                                        setCityData(
-                                            e.name,
-                                            e.name,
-                                            e.coord.lat,
-                                            e.coord.lon
-                                        )
-                                    }
-                                />
-                            ))}
+                <>
+                    <Search
+                        term={searchTerm}
+                        options={options}
+                        onInputChange={onSearchInputChange}
+                        onOptionSelect={onOptionSelect}
+                        getUserLocation={getUserLocation}
+                        onUnitChange={onUnitChange}
+                    >
+                        <section className="mt-6">
+                            <div className="flex flex-wrap justify-between">
+                                {randomdLocation &&
+                                    randomdLocation.map((l) => (
+                                        <WeatherOverviewCard
+                                            key={`${l.id}-${l.zip}`}
+                                            lat={l.latitude}
+                                            lon={l.longitude}
+                                            unit={unit.value}
+                                            onCardClick={(e) =>
+                                                setCityData(
+                                                    e.name,
+                                                    e.name,
+                                                    e.coord.lat,
+                                                    e.coord.lon
+                                                )
+                                            }
+                                        />
+                                    ))}
+                            </div>
+                        </section>
+                    </Search>
+                </>
+            )}
+
+            {errorMessage && (
+                <section
+                    className="flex flex-col mb-4 mt-4 w-3/4 rounded-lg bg-rose-100 px-6 py-5 text-base font-semibold text-rose-500"
+                    role="alert"
+                >
+                    <div className="font-bold">
+                        {errorMessage.humanReadable}
                     </div>
+                    <div className="font-thin">{errorMessage.error}</div>
                 </section>
             )}
-        </section>
+        </main>
     )
 }
 

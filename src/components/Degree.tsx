@@ -7,7 +7,7 @@ interface Prop {
 const Degree: FC<Prop> = ({ temp, unit }) => {
     return (
         <>
-            {temp} <sup>o</sup>
+            {temp} &deg;
             {unit}
         </>
     )

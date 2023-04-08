@@ -19,7 +19,11 @@ const useForecast = (
             )
                 .then((res) => res.json())
                 .then((data) => {
-                    setForecastData(data)
+                    const slicedForecastData = {
+                        ...data,
+                        list: data.list.slice(0, 16),
+                    }
+                    setForecastData(slicedForecastData)
                     setLoadingForecast(false)
                 })
                 .catch((error) =>

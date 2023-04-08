@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { ChangeEvent, FC } from "react"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
 import { forecastType, weatherDataType } from "../types"
 import Spinner from "./Spinner"
@@ -10,8 +10,8 @@ import {
     getVisibilityValue,
     getWindDirection,
 } from "../utils"
-import { WiSunrise, WiSunset } from "react-icons/wi"
 import Tile from "./Tile"
+import UnitSwitcher from "./UnitSwitcher"
 
 interface Props {
     onBackClick: () => void
@@ -20,6 +20,7 @@ interface Props {
     loadingWeather: boolean
     loadingForecast: boolean
     unit: string | null
+    onUnitChange: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
 const Forecast: FC<Props> = ({
@@ -29,6 +30,7 @@ const Forecast: FC<Props> = ({
     loadingWeather,
     loadingForecast,
     unit,
+    onUnitChange,
 }) => {
     if (loadingWeather) return <Spinner>Loading Weather Data</Spinner>
 
@@ -38,11 +40,14 @@ const Forecast: FC<Props> = ({
     const firstForecastDataListItem = forecastData.list[0]
 
     return (
-        <div className="w-full md:max-w-[500px] py-4 md:py-4 md:px-10 lg:px-24 h-full lg:h-auto bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg">
-            <button onClick={onBackClick}>
-                <FaRegArrowAltCircleLeft size={30} />
-            </button>
-            <div className="mx-auto w-full">
+        <div className="w-[100vw] md:max-w-[800px] p-4 py-4 md:py-4 md:px-10 lg:px-24 h-auto rounded-lg">
+            <div className="flex flex-auto justify-between mb-2">
+                <button onClick={onBackClick}>
+                    <FaRegArrowAltCircleLeft size={30} />
+                </button>
+                <UnitSwitcher onChange={onUnitChange} />
+            </div>
+            <div className="mx-auto w-full p-2 bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg  bg-gradient-to-br from-teal-100 via-green-100 to-red-100">
                 <section className="text-center">
                     <h2 className="text-2xl font-black">
                         {weatherData.name}{" "}
@@ -76,6 +81,7 @@ const Forecast: FC<Props> = ({
                     </p>
                 </section>
 
+                <h6 className="mt-2 text-lg font-bold">Hourly forecast</h6>
                 <section className="flex overflow-x-scroll mt-4 pb-2 mb-5">
                     {forecastData.list.map((item, i) => (
                         <div
@@ -101,17 +107,19 @@ const Forecast: FC<Props> = ({
                     ))}
                 </section>
 
-                <section className="flex flex-wrap justify-between text-zinc-700">
+                <section className="flex flex-wrap justify-center text-zinc-700">
                     <Tile
                         icon="sunrise"
                         title="Sunrise Time"
                         info={getSunTime(weatherData.sys.sunrise)}
+                        description="Timezone: UTC"
                     />
 
                     <Tile
                         icon="sunset"
                         title="Sunset Time"
                         info={getSunTime(weatherData.sys.sunset)}
+                        description="Timezone: UTC"
                     />
 
                     <Tile
@@ -121,7 +129,7 @@ const Forecast: FC<Props> = ({
                         description={`${getWindDirection(
                             Math.round(weatherData.wind.deg)
                         )}, gusts 
-            ${weatherData.wind.gust.toFixed(1)} km/h`}
+                        ${weatherData.wind.gust.toFixed(1)} km/h`}
                     />
                     <Tile
                         icon="feels"

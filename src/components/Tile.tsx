@@ -41,7 +41,7 @@ const Tile: FC<Props> = ({ icon, title, info, description }) => {
     const Icon = icons[icon]
 
     return (
-        <article className="w-[140px] h-[130px] text-zinc-700 bg-white/20 backdrop-blur-ls rounded drop-shadow-lg p-2 mb-5 flex flex-col justify-between">
+        <article className="items-start justify-center w-full h-auto md:w-[140px] md:h-[130px] md:mr-4 lg:mr-4 text-zinc-700 p-2 mb-5 flex flex-col bg-white bg-opacity-20 backdrop-blur-ls rounded-2xl drop-shadow-xl">
             <div className="flex items-center text-sm font-bold">
                 {Icon} <h4 className="ml-1">{title}</h4>
             </div>
