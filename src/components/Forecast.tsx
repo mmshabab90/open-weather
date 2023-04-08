@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC } from "react"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
-import { forecastType, weatherDataType } from "../types"
+import { forecastType } from "../types"
 import Spinner from "./Spinner"
 import Degree from "./Degree"
 import {
@@ -15,9 +15,7 @@ import UnitSwitcher from "./UnitSwitcher"
 
 interface Props {
     onBackClick: () => void
-    weatherData: weatherDataType
     forecastData: forecastType
-    loadingWeather: boolean
     loadingForecast: boolean
     unit: string | null
     onUnitChange: (e: ChangeEvent<HTMLInputElement>) => void
@@ -25,19 +23,15 @@ interface Props {
 
 const Forecast: FC<Props> = ({
     onBackClick,
-    weatherData,
     forecastData,
-    loadingWeather,
     loadingForecast,
     unit,
     onUnitChange,
 }) => {
-    if (loadingWeather) return <Spinner>Loading Weather Data</Spinner>
-
     if (loadingForecast) return <Spinner>Loading Forecast Data</Spinner>
 
     const unitType = unit === "imperial" ? "F" : unit === "metric" ? "C" : null
-    const firstForecastDataListItem = forecastData.list[0]
+    const data = forecastData.list[0]
 
     return (
         <div className="w-[100vw] md:max-w-[800px] p-4 py-4 md:py-4 md:px-10 lg:px-24 h-auto rounded-lg">
@@ -50,31 +44,30 @@ const Forecast: FC<Props> = ({
             <div className="mx-auto w-full p-2 bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg  bg-gradient-to-br from-teal-100 via-green-100 to-red-100">
                 <section className="text-center">
                     <h2 className="text-2xl font-black">
-                        {weatherData.name}{" "}
                         <span className="font-thin">
+                            {forecastData.city.name},{" "}
                             {forecastData.city.country}
                         </span>
                     </h2>
                     <h1 className="text-4xl font-extrabold">
                         <Degree
-                            temp={Math.round(weatherData.main.temp)}
+                            temp={Math.round(data.main.temp)}
                             unit={unitType}
                         />
                     </h1>
                     <p className="text-sm">
-                        {weatherData.weather[0].main} (
-                        {weatherData.weather[0].description})
+                        {data.weather[0].main} ({data.weather[0].description})
                     </p>
                     <p className="text-sm">
                         H:{" "}
                         <Degree
-                            temp={Math.ceil(weatherData.main.temp_max)}
+                            temp={Math.ceil(data.main.temp_max)}
                             unit={unitType}
                         />
                         <span className="ml-4">
                             L:{" "}
                             <Degree
-                                temp={Math.floor(weatherData.main.temp_min)}
+                                temp={Math.floor(data.main.temp_min)}
                                 unit={unitType}
                             />
                         </span>
@@ -111,38 +104,38 @@ const Forecast: FC<Props> = ({
                     <Tile
                         icon="sunrise"
                         title="Sunrise Time"
-                        info={getSunTime(weatherData.sys.sunrise)}
+                        info={getSunTime(forecastData.city.sunrise)}
                         description="Timezone: UTC"
                     />
 
                     <Tile
                         icon="sunset"
                         title="Sunset Time"
-                        info={getSunTime(weatherData.sys.sunset)}
+                        info={getSunTime(forecastData.city.sunset)}
                         description="Timezone: UTC"
                     />
 
                     <Tile
                         icon="wind"
                         title="Wind"
-                        info={`${Math.round(weatherData.wind.speed)} km/h`}
+                        info={`${Math.round(data.wind.speed)} km/h`}
                         description={`${getWindDirection(
-                            Math.round(weatherData.wind.deg)
+                            Math.round(data.wind.deg)
                         )}, gusts 
-                        ${weatherData.wind.gust.toFixed(1)} km/h`}
+                        ${data.wind.gust.toFixed(1)} km/h`}
                     />
                     <Tile
                         icon="feels"
                         title="Feels like"
                         info={
                             <Degree
-                                temp={Math.round(weatherData.main.feels_like)}
+                                temp={Math.round(data.main.feels_like)}
                                 unit={unitType}
                             />
                         }
                         description={`Feels ${
-                            Math.round(weatherData.main.feels_like) <
-                            Math.round(weatherData.main.temp)
+                            Math.round(data.main.feels_like) <
+                            Math.round(data.main.temp)
                                 ? "colder"
                                 : "warmer"
                         }`}
@@ -150,27 +143,23 @@ const Forecast: FC<Props> = ({
                     <Tile
                         icon="humidity"
                         title="Humidity"
-                        info={`${weatherData.main.humidity} %`}
-                        description={getHumidityValue(
-                            weatherData.main.humidity
-                        )}
+                        info={`${data.main.humidity} %`}
+                        description={getHumidityValue(data.main.humidity)}
                     />
                     <Tile
                         icon="pop"
                         title="Precipitation"
-                        info={`${Math.round(
-                            firstForecastDataListItem.pop * 100
-                        )}%`}
-                        description={`${getPop(
-                            firstForecastDataListItem.pop
-                        )}, clouds at ${firstForecastDataListItem.clouds.all}%`}
+                        info={`${Math.round(data.pop * 100)}%`}
+                        description={`${getPop(data.pop)}, clouds at ${
+                            data.clouds.all
+                        }%`}
                     />
                     <Tile
                         icon="pressure"
                         title="Pressure"
-                        info={`${weatherData.main.pressure} hPa`}
+                        info={`${data.main.pressure} hPa`}
                         description={` ${
-                            Math.round(weatherData.main.pressure) < 1013
+                            Math.round(data.main.pressure) < 1013
                                 ? "Lower"
                                 : "Higher"
                         } than standard`}
@@ -178,8 +167,8 @@ const Forecast: FC<Props> = ({
                     <Tile
                         icon="visibility"
                         title="Visibility"
-                        info={`${(weatherData.visibility / 1000).toFixed()} km`}
-                        description={getVisibilityValue(weatherData.visibility)}
+                        info={`${(data.visibility / 1000).toFixed()} km`}
+                        description={getVisibilityValue(data.visibility)}
                     />
                 </section>
             </div>

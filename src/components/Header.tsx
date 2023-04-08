@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC } from "react"
-import Degree from "./Degree"
 import UnitSwitcher from "./UnitSwitcher"
 
 interface Props {

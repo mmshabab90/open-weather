@@ -75,6 +75,7 @@ export type forecastType = {
     city: {
         name: string
         country: string
-        population: number
+        sunrise: number
+        sunset: number
     }
 }

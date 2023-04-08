@@ -1,8 +1,6 @@
 import React, { ChangeEvent, FC, useState } from "react"
-import Header from "./Header"
 import Search from "./Search"
 import { errorType, optionType } from "../types"
-import useWeather from "../hooks/useWeather"
 import WeatherOverviewCard from "./WeatherOverviewCard"
 import useRandomLocationGenerator from "../hooks/useRandomLocationGenrator"
 import useForecast from "../hooks/useForecast"
@@ -22,11 +20,7 @@ const Dashboard: FC = () => {
     })
 
     const randomdLocation = useRandomLocationGenerator()
-    const { loadingWeather, weatherData } = useWeather(
-        city?.lat,
-        city?.lon,
-        unit.value
-    )
+
     const { loadingForecast, forecastData } = useForecast(
         city?.lat,
         city?.lon,
@@ -118,12 +112,10 @@ const Dashboard: FC = () => {
 
     return (
         <main className="h-[100vh] w-full flex flex-col items-center bg-white">
-            {weatherData && forecastData ? (
+            {forecastData ? (
                 <Forecast
                     onBackClick={() => setCity(null)}
-                    weatherData={weatherData}
                     forecastData={forecastData}
-                    loadingWeather={loadingWeather}
                     loadingForecast={loadingForecast}
                     unit={unit.value}
                     onUnitChange={onUnitChange}
