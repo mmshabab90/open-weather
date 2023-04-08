@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC } from "react"
 import { optionType } from "../types"
 import Suggestions from "./Suggestions"
-import { FaMapMarker } from "react-icons/fa"
+import { FaSearchLocation, FaMapMarker } from "react-icons/fa"
 import Tooltip from "./Tooltip"
 
 interface Props {
@@ -22,28 +22,27 @@ const Search: FC<Props> = ({
     getUserLocation,
 }) => {
     return (
-        <div className="relative flex mt-10 md:mt-4">
+        <div className="relative md:block w-full mt-10 md:mt-4">
+            <div
+                className="absolute inset-y-0 left-0 
+      flex items-center pl-3 pointer-events-none"
+            >
+                <FaSearchLocation />
+            </div>
             <input
                 type="text"
+                className="block w-full p-2 pl-10 rounded-l-lg rounded-r-lg rounded-t-lg border-white dark:placeholder-gray-400"
+                placeholder="Search Location..."
                 value={term}
-                className="px-2 py-1 border-2 border-white"
                 onChange={onInputChange}
-                placeholder="Enter location name"
             />
-
             <Suggestions options={options} onSelect={onOptionSelect} />
-
             <button
-                className="rounded border-2 border-l-zinc-100 border-b-zinc-100 border-t-zinc-100 hover:border-zinc-500 hover:text-zinc-500  text-black-100 px-2 py-1 cursor-pointer"
-                onClick={onSubmit}
-            >
-                Search
-            </button>
-            <button
-                className="rounded-r-md border-2 border-r-zinc-100 border-b-zinc-100 border-t-zinc-100 hover:border-zinc-500 hover:text-zinc-500  text-black-100 px-2 py-1 cursor-pointer"
+                className="absolute inset-y-0 right-0 
+      flex items-center pr-2 cursor-pointer"
                 onClick={getUserLocation}
             >
-                <Tooltip tooltipText="Current Location">
+                <Tooltip tooltipText="Get Current Location">
                     <FaMapMarker />
                 </Tooltip>
             </button>

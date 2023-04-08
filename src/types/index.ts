@@ -9,6 +9,11 @@ export type errorType = {
     humanReadable: string
 }
 
+type coordType = {
+    lon: number
+    lat: number
+}
+
 type weatherType = {
     id: number
     main: string
@@ -48,6 +53,8 @@ export type weatherDataType = {
     wind: windType
     sys: sysType
     name: string
+    cod: number
+    coord: coordType
 }
 
 type listType = {

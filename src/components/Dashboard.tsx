@@ -1,10 +1,17 @@
 import React, { ChangeEvent, FC, useState } from "react"
 import Header from "./Header"
 import Search from "./Search"
-import { errorType, optionType } from "../types"
+import { errorType, forecastType, optionType, weatherDataType } from "../types"
 import useWeather from "../hooks/useWeather"
 import WeatherOverviewCard from "./WeatherOverviewCard"
 import useRandomLocationGenerator from "../hooks/useRandomLocationGenrator"
+import useForecast from "../hooks/useForecast"
+import Forecast from "./Forecast"
+
+interface WeatherAndForecastData {
+    weatherData: weatherDataType
+    forecastData: forecastType
+}
 
 const Dashboard: FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>("")
@@ -18,8 +25,19 @@ const Dashboard: FC = () => {
         key: "unit",
         value: localStorage.getItem("unit"),
     })
+    const [data, setData] = useState<WeatherAndForecastData | null>(null)
 
     const randomdLocation = useRandomLocationGenerator()
+    const { weatherData, errorWeatherMessage } = useWeather(
+        city?.lat,
+        city?.lon,
+        unit.value
+    )
+    const { forecastData, errorForecastMessage } = useForecast(
+        city?.lat,
+        city?.lon,
+        unit.value
+    )
 
     const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
@@ -27,6 +45,11 @@ const Dashboard: FC = () => {
 
         if (value.trim() !== "") {
             getSearchOptions(value.trim())
+        }
+
+        if (value.trim() === "") {
+            setOptions([])
+            setCity(null)
         }
     }
 
@@ -52,8 +75,20 @@ const Dashboard: FC = () => {
 
     const onSubmit = () => {
         if (!city) return
+    }
 
-        console.log("get forecast")
+    const setCityData = (
+        name: string,
+        country: string,
+        lat: number,
+        lon: number
+    ) => {
+        setCity({
+            name: name,
+            country: country,
+            lat: lat,
+            lon: lon,
+        })
     }
 
     const getUserLocation = () => {
@@ -65,12 +100,12 @@ const Dashboard: FC = () => {
         }
         navigator.geolocation.getCurrentPosition(
             function (position) {
-                setCity({
-                    name: "User Location",
-                    country: "User Country",
-                    lat: position.coords.latitude,
-                    lon: position.coords.longitude,
-                })
+                setCityData(
+                    "User Location",
+                    "User Country",
+                    position.coords.latitude,
+                    position.coords.longitude
+                )
             },
             function (error) {
                 setErrorMessage({
@@ -103,19 +138,30 @@ const Dashboard: FC = () => {
                     getUserLocation={getUserLocation}
                 />
             </section>
-            <section className="z-0 w-full md:w-11/12 p-4 leading-normal text-center items-center justify-center md:px-10 h-max lg:h-3/6 bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
-                <div className="flex flex-wrap justify-between">
-                    {randomdLocation &&
-                        randomdLocation.map((l) => (
-                            <WeatherOverviewCard
-                                key={`${l.id}-${l.zip}`}
-                                lat={l.latitude}
-                                lon={l.longitude}
-                                unit={unit.value}
-                                onCardClick={(e) => console.log(e)}
-                            />
-                        ))}
-                </div>
+            <section className="z-0 p-4 leading-normal text-center items-center justify-center md:px-10 h-auto w-auto bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">
+                {weatherData && forecastData ? (
+                    <Forecast onBackClick={() => setCity(null)} />
+                ) : (
+                    <div className="flex flex-wrap justify-between">
+                        {randomdLocation &&
+                            randomdLocation.map((l) => (
+                                <WeatherOverviewCard
+                                    key={`${l.id}-${l.zip}`}
+                                    lat={l.latitude}
+                                    lon={l.longitude}
+                                    unit={unit.value}
+                                    onCardClick={(e) =>
+                                        setCityData(
+                                            e.name,
+                                            e.name,
+                                            e.coord.lat,
+                                            e.coord.lon
+                                        )
+                                    }
+                                />
+                            ))}
+                    </div>
+                )}
             </section>
         </section>
     )
