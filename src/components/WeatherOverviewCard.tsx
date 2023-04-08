@@ -2,11 +2,12 @@ import React, { FC, ReactElement } from "react"
 import useWeather from "../hooks/useWeather"
 import Spinner from "./Spinner"
 import { weatherDataType } from "../types"
+import Degree from "./Degree"
 
 interface Props {
     lat: number
     lon: number
-    unit: string
+    unit: string | null
     onCardClick: (e: weatherDataType) => void
 }
 
@@ -61,11 +62,11 @@ const WeatherOverviewCard: FC<Props> = ({ lat, lon, unit, onCardClick }) => {
                         <h3 className="font-bold text-3xl text-gray-600">
                             {Math.round(weatherData.main.temp)}{" "}
                             {unit === "metric" ? (
-                                <span>&deg;C</span>
+                                <Degree unit="C" />
                             ) : unit === "imperial" ? (
-                                <span>&deg;F</span>
+                                <Degree unit="F" />
                             ) : (
-                                <span>&deg;</span>
+                                <Degree />
                             )}
                         </h3>
                         <h6 className="font-thin uppercase text-gray-500">

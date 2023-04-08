@@ -19,6 +19,8 @@ const Dashboard: FC = () => {
         value: localStorage.getItem("unit"),
     })
 
+    const randomdLocation = useRandomLocationGenerator()
+
     const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
         setSearchTerm(value)
@@ -87,8 +89,6 @@ const Dashboard: FC = () => {
             ? setUnit({ key: "unit", value: "imperial" })
             : setUnit({ key: "unit", value: "metric" })
     }
-
-    const randomdLocation = useRandomLocationGenerator()
 
     return (
         <section className="w-full md:max-w-[1060px] p-4 flex flex-col text-center items-center justify-start md:px-10 h-full lg:h-[800px] bg-white bg-opacity-20 backdrop-blur-ls rounded drop-shadow-lg text-zinc-700">

@@ -1,6 +1,8 @@
 import React, { ChangeEvent, FC } from "react"
 import { optionType } from "../types"
 import Suggestions from "./Suggestions"
+import { FaMapMarker } from "react-icons/fa"
+import Tooltip from "./Tooltip"
 
 interface Props {
     term: string
@@ -41,7 +43,9 @@ const Search: FC<Props> = ({
                 className="rounded-r-md border-2 border-r-zinc-100 border-b-zinc-100 border-t-zinc-100 hover:border-zinc-500 hover:text-zinc-500  text-black-100 px-2 py-1 cursor-pointer"
                 onClick={getUserLocation}
             >
-                Get Current Location
+                <Tooltip tooltipText="Current Location">
+                    <FaMapMarker />
+                </Tooltip>
             </button>
         </div>
     )
