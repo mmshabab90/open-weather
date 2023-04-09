@@ -16,7 +16,7 @@ const Spinner: FC<Props> = ({ children }) => {
                     Loading...
                 </span>
             </div>
-            <p role="spinner-content">{children}</p>
+            <p id="spinner-content">{children}</p>
         </>
     )
 }
