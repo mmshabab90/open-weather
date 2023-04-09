@@ -95,7 +95,7 @@ const Dashboard: FC = () => {
             function (error) {
                 setErrorMessage({
                     error: error.message,
-                    humanReadable: "User denied location permission.",
+                    humanReadable: "Error",
                 })
             }
         )
