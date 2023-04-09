@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-type locationData = {
+export type locationData = {
     latitude: number
     longitude: number
     id: number
