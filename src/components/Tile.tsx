@@ -41,13 +41,25 @@ const Tile: FC<Props> = ({ icon, title, info, description }) => {
     const Icon = icons[icon]
 
     return (
-        <article className="items-start justify-center w-full h-auto md:w-[140px] md:h-[130px] md:mr-4 lg:mr-4 text-zinc-700 p-2 mb-5 flex flex-col bg-white bg-opacity-20 backdrop-blur-ls rounded-2xl drop-shadow-xl">
+        <article
+            id="forecast-tile"
+            className="items-start justify-center w-full h-auto md:w-[140px] md:h-[130px] md:mr-4 lg:mr-4 text-zinc-700 p-2 mb-5 flex flex-col bg-white bg-opacity-20 backdrop-blur-ls rounded-2xl drop-shadow-xl"
+        >
             <div className="flex items-center text-sm font-bold">
-                {Icon} <h4 className="ml-1">{title}</h4>
+                {Icon}{" "}
+                <h4 className="ml-1" id="tile-title">
+                    {title}
+                </h4>
             </div>
-            <h3 className="mt-2 text-lg">{info}</h3>
+            <h3 className="mt-2 text-lg" id="tile-info">
+                {info}
+            </h3>
 
-            <div className="text-xs font-bold">{description}</div>
+            {description && (
+                <div className="text-xs font-bold" id="tile-desc">
+                    {description}
+                </div>
+            )}
         </article>
     )
 }
