@@ -2,11 +2,16 @@ import React, { ChangeEvent, FC, useState } from "react"
 import Search from "./Search"
 import { errorType, optionType } from "../types"
 import WeatherOverviewCard from "./WeatherOverviewCard"
-import useRandomLocationGenerator from "../hooks/useRandomLocationGenrator"
-import useForecast from "../hooks/useForecast"
+import useRandomLocationGenerator, {
+    locationData,
+} from "../hooks/useRandomLocationGenrator"
 import Forecast from "./Forecast"
+import Alert from "./Alert"
+import useNetwork from "../hooks/useNetwork"
 
 const Dashboard: FC = () => {
+    const connectedToInternet = useNetwork()
+
     const [searchTerm, setSearchTerm] = useState<string>("")
     const [options, setOptions] = useState<optionType[] | []>([])
     const [errorMessage, setErrorMessage] = useState<errorType | null>(null)
@@ -20,12 +25,6 @@ const Dashboard: FC = () => {
     })
 
     const randomdLocation = useRandomLocationGenerator()
-
-    const { loadingForecast, forecastData } = useForecast(
-        city?.lat,
-        city?.lon,
-        unit.value
-    )
 
     const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
@@ -95,7 +94,7 @@ const Dashboard: FC = () => {
             function (error) {
                 setErrorMessage({
                     error: error.message,
-                    humanReadable: "User denied location permission.",
+                    humanReadable: "Error",
                 })
             }
         )
@@ -112,11 +111,10 @@ const Dashboard: FC = () => {
 
     return (
         <main className="h-[100vh] w-full flex flex-col items-center bg-white">
-            {forecastData ? (
+            {city ? (
                 <Forecast
                     onBackClick={() => setCity(null)}
-                    forecastData={forecastData}
-                    loadingForecast={loadingForecast}
+                    city={city}
                     unit={unit.value}
                     onUnitChange={onUnitChange}
                 />
@@ -133,7 +131,7 @@ const Dashboard: FC = () => {
                         <section className="mt-6">
                             <div className="flex flex-wrap justify-between">
                                 {randomdLocation &&
-                                    randomdLocation.map((l) => (
+                                    randomdLocation.map((l: locationData) => (
                                         <WeatherOverviewCard
                                             key={`${l.id}-${l.zip}`}
                                             lat={l.latitude}
@@ -155,16 +153,15 @@ const Dashboard: FC = () => {
                 </>
             )}
 
-            {errorMessage && (
-                <section
-                    className="flex flex-col mb-4 mt-4 w-3/4 rounded-lg bg-rose-100 px-6 py-5 text-base font-semibold text-rose-500"
-                    role="alert"
-                >
-                    <div className="font-bold">
-                        {errorMessage.humanReadable}
-                    </div>
-                    <div className="font-thin">{errorMessage.error}</div>
-                </section>
+            {errorMessage && <Alert error={errorMessage} color="bg-rose-300" />}
+            {!connectedToInternet && (
+                <Alert
+                    error={{
+                        error: "You are not connected to the internet. The app might crash! Once connected to the internet, the alert will go away. Please fresh the browser to access the app.",
+                        humanReadable: "Internet Connection Error!",
+                    }}
+                    color="bg-rose-300"
+                />
             )}
         </main>
     )

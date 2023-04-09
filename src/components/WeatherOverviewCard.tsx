@@ -21,7 +21,9 @@ const WeatherOverviewCard: FC<Props> = ({ lat, lon, unit, onCardClick }) => {
     if (loadingWeather) {
         return (
             <Container>
-                <Spinner>Loading weather data</Spinner>
+                <div className="flex flex-auto items-center justify-center">
+                    <Spinner>Loading weather data</Spinner>
+                </div>
             </Container>
         )
     }

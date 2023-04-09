@@ -15,7 +15,7 @@ const Header: FC<Props> = ({ onUnitChange }) => {
                     </h1>
                 </div>
                 <div className="p-2">
-                    <p className="text-sm mt-2">
+                    <p className="text-sm mt-2 md:pl-44 md:pr-44">
                         Enter the name of a place in the search box, you want to
                         know the weather of and select an option from dropdown.
                         You can also click on the location marker to get the
