@@ -8,7 +8,7 @@ interface Props {
 const Header: FC<Props> = ({ onUnitChange }) => {
     return (
         <>
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-center items-center mt-4">
                 <div>
                     <h1 className="text-4xl font-thin">
                         Weather <span className="font-black">Forecast</span>

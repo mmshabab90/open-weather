@@ -150,10 +150,14 @@ const Dashboard: FC = () => {
                             </div>
                         </section>
                     </Search>
+                    {errorMessage && (
+                        <div className="mt-4">
+                            <Alert error={errorMessage} color="bg-rose-300" />
+                        </div>
+                    )}
                 </>
             )}
 
-            {errorMessage && <Alert error={errorMessage} color="bg-rose-300" />}
             {!connectedToInternet && (
                 <Alert
                     error={{

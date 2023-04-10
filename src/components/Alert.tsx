@@ -6,11 +6,11 @@ interface Props {
     color: string
 }
 
-const Alert: FC<Props> = ({ error,color }) => {
+const Alert: FC<Props> = ({ error, color }) => {
     return (
         error && (
             <section
-                className={`flex flex-col mb-4 mt-4 w-3/4 rounded-lg ${color} px-6 py-5 text-base font-semibold text-black`}
+                className={`flex flex-col mb-4 mt-4 w-full rounded-lg ${color} px-6 py-5 text-base font-semibold text-black`}
                 role="alert"
             >
                 <div className="font-bold">{error.humanReadable}</div>
