@@ -8,7 +8,7 @@ The app uses local storage to store the unit selection (C or F).
 
 Once you clone the repo in your local machine, run the following commands from the project/repo directory to install all required dependancies.
 
-### `npm install`
+### `npm install --legacy-peer-deps`
 
 ## Note
 This app is created with create-react-app. Make sure that node is installed in your local machine.
