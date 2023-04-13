@@ -6,10 +6,10 @@ interface Prop {
 }
 const Degree: FC<Prop> = ({ temp, unit }) => {
     return (
-        <>
+        <span>
             {temp} &deg;
             {unit}
-        </>
+        </span>
     )
 }
 

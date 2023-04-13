@@ -79,3 +79,8 @@ export type forecastType = {
         sunset: number
     }
 }
+
+export enum DefaultTemperatureUnit {
+    key = "unit",
+    value = "metric",
+}

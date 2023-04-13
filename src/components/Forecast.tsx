@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, ReactElement } from "react"
 import { FaRegArrowAltCircleLeft } from "react-icons/fa"
-import { optionType } from "../types"
+import { DefaultTemperatureUnit, optionType } from "../types"
 import Spinner from "./Spinner"
 import Degree from "./Degree"
 import {
@@ -58,8 +58,7 @@ const Forecast: FC<Props> = ({ onBackClick, city, unit, onUnitChange }) => {
                         {forecastData.city.name && forecastData.city.country ? (
                             <h2 className="text-2xl font-black">
                                 <span className="font-thin">
-                                    {forecastData.city.name},{" "}
-                                    {forecastData.city.country}
+                                    {`${forecastData.city.name}, ${forecastData.city.country}`}
                                 </span>
                             </h2>
                         ) : null}
@@ -119,36 +118,48 @@ const Forecast: FC<Props> = ({ onBackClick, city, unit, onUnitChange }) => {
                         <Tile
                             icon="sunrise"
                             title="Sunrise Time"
-                            info={getSunTime(forecastData.city.sunrise)}
-                            description="Timezone: UTC"
+                            data={getSunTime(forecastData.city.sunrise)}
+                            textDescription="Timezone: UTC"
                         />
 
                         <Tile
                             icon="sunset"
                             title="Sunset Time"
-                            info={getSunTime(forecastData.city.sunset)}
-                            description="Timezone: UTC"
+                            data={getSunTime(forecastData.city.sunset)}
+                            textDescription="Timezone: UTC"
                         />
 
                         <Tile
                             icon="wind"
                             title="Wind"
-                            info={`${Math.round(data.wind.speed)} km/h`}
-                            description={`${getWindDirection(
+                            data={
+                                localStorage.getItem(
+                                    DefaultTemperatureUnit.key
+                                ) === DefaultTemperatureUnit.value
+                                    ? `${Math.round(data.wind.speed)} m/s`
+                                    : `${Math.round(data.wind.speed)} mph`
+                            }
+                            textDescription={`${getWindDirection(
                                 Math.round(data.wind.deg)
                             )}, gusts 
-                        ${data.wind.gust.toFixed(1)} km/h`}
+                        ${data.wind.gust.toFixed(1)} ${
+                                localStorage.getItem(
+                                    DefaultTemperatureUnit.key
+                                ) === DefaultTemperatureUnit.value
+                                    ? ` m/s`
+                                    : ` mph`
+                            }`}
                         />
                         <Tile
                             icon="feels"
                             title="Feels like"
-                            info={
+                            data={
                                 <Degree
                                     temp={Math.round(data.main.feels_like)}
                                     unit={unitType}
                                 />
                             }
-                            description={`Feels ${
+                            textDescription={`Feels ${
                                 Math.round(data.main.feels_like) <
                                 Math.round(data.main.temp)
                                     ? "colder"
@@ -158,22 +169,24 @@ const Forecast: FC<Props> = ({ onBackClick, city, unit, onUnitChange }) => {
                         <Tile
                             icon="humidity"
                             title="Humidity"
-                            info={`${data.main.humidity} %`}
-                            description={getHumidityValue(data.main.humidity)}
+                            data={`${data.main.humidity} %`}
+                            textDescription={getHumidityValue(
+                                data.main.humidity
+                            )}
                         />
                         <Tile
                             icon="pop"
                             title="Precipitation"
-                            info={`${Math.round(data.pop * 100)}%`}
-                            description={`${getPop(data.pop)}, clouds at ${
+                            data={`${Math.round(data.pop * 100)}%`}
+                            textDescription={`${getPop(data.pop)}, clouds at ${
                                 data.clouds.all
                             }%`}
                         />
                         <Tile
                             icon="pressure"
                             title="Pressure"
-                            info={`${data.main.pressure} hPa`}
-                            description={` ${
+                            data={`${data.main.pressure} hPa`}
+                            textDescription={` ${
                                 Math.round(data.main.pressure) < 1013
                                     ? "Lower"
                                     : "Higher"
@@ -182,8 +195,10 @@ const Forecast: FC<Props> = ({ onBackClick, city, unit, onUnitChange }) => {
                         <Tile
                             icon="visibility"
                             title="Visibility"
-                            info={`${(data.visibility / 1000).toFixed()} km`}
-                            description={getVisibilityValue(data.visibility)}
+                            data={`${(data.visibility / 1000).toFixed()} km`}
+                            textDescription={getVisibilityValue(
+                                data.visibility
+                            )}
                         />
                     </section>
                 </div>

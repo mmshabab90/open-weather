@@ -22,8 +22,8 @@ type iconType =
 interface Props {
     icon: iconType
     title: string
-    info: string | ReactElement
-    description?: string | ReactElement
+    data: string | ReactElement
+    textDescription?: string | ReactElement
 }
 
 const icons = {
@@ -37,7 +37,7 @@ const icons = {
     sunset: <WiSunset />,
 }
 
-const Tile: FC<Props> = ({ icon, title, info, description }) => {
+const Tile: FC<Props> = ({ icon, title, data, textDescription }) => {
     const Icon = icons[icon]
 
     return (
@@ -52,12 +52,12 @@ const Tile: FC<Props> = ({ icon, title, info, description }) => {
                 </h4>
             </div>
             <h3 className="mt-2 text-lg" id="tile-info">
-                {info}
+                {data}
             </h3>
 
-            {description && (
+            {textDescription && (
                 <div className="text-xs font-bold" id="tile-desc">
-                    {description}
+                    {textDescription}
                 </div>
             )}
         </article>

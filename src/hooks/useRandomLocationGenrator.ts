@@ -8,17 +8,17 @@ export type locationData = {
 }
 
 const useRandomLocationGenerator = () => {
-    const [randomLocations, setRandomLocaitons] = useState<
+    const [randomLocations, setRandomLocations] = useState<
         locationData[] | null
     >(null)
     useEffect(() => {
         fetch("https://random-data-api.com/api/v2/addresses?size=2")
             .then((res) => res.json())
-            .then((data) => setRandomLocaitons(data))
+            .then((data) => setRandomLocations(data))
             .catch((error) => console.log(error))
 
         return () => {
-            setRandomLocaitons(null)
+            setRandomLocations(null)
         }
     }, [])
 

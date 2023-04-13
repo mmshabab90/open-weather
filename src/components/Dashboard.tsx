@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useState } from "react"
 import Search from "./Search"
-import { errorType, optionType } from "../types"
+import { DefaultTemperatureUnit, errorType, optionType } from "../types"
 import WeatherOverviewCard from "./WeatherOverviewCard"
 import useRandomLocationGenerator, {
     locationData,
@@ -17,14 +17,17 @@ const Dashboard: FC = () => {
     const [errorMessage, setErrorMessage] = useState<errorType | null>(null)
     const [city, setCity] = useState<optionType | null>(null)
     const [unit, setUnit] = useState<{
-        key: string | null
-        value: string | null
+        key: string
+        value: string
     }>({
-        key: "unit",
-        value: localStorage.getItem("unit"),
+        key: DefaultTemperatureUnit.key,
+        value: localStorage.getItem("unit") || DefaultTemperatureUnit.value,
     })
 
-    const randomdLocation = useRandomLocationGenerator()
+    const randomLocations = useRandomLocationGenerator()
+
+    const resetOptions = () => setOptions([])
+    const resetCity = () => setCity(null)
 
     const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
@@ -35,8 +38,8 @@ const Dashboard: FC = () => {
         }
 
         if (value.trim() === "") {
-            setOptions([])
-            setCity(null)
+            resetOptions()
+            resetCity()
         }
     }
 
@@ -57,7 +60,7 @@ const Dashboard: FC = () => {
     const onOptionSelect = (option: optionType) => {
         setSearchTerm(option.name)
         setCity(option)
-        setOptions([])
+        resetOptions()
     }
 
     const setCityData = (
@@ -113,7 +116,7 @@ const Dashboard: FC = () => {
         <main className="h-[100vh] w-full flex flex-col items-center bg-white">
             {city ? (
                 <Forecast
-                    onBackClick={() => setCity(null)}
+                    onBackClick={() => resetCity()}
                     city={city}
                     unit={unit.value}
                     onUnitChange={onUnitChange}
@@ -130,8 +133,8 @@ const Dashboard: FC = () => {
                     >
                         <section className="mt-6">
                             <div className="flex flex-wrap justify-between">
-                                {randomdLocation &&
-                                    randomdLocation.map((l: locationData) => (
+                                {randomLocations &&
+                                    randomLocations.map((l: locationData) => (
                                         <WeatherOverviewCard
                                             key={`${l.id}-${l.zip}`}
                                             lat={l.latitude}

@@ -1,16 +1,22 @@
-export const getWindDirection = (deg: number): string => {
-    if (deg > 15 && deg <= 75) return "NE"
-
-    if (deg > 76 && deg <= 105) return "E"
-    if (deg > 105 && deg <= 165) return "SE"
-
-    if (deg > 166 && deg <= 195) return "S"
-    if (deg > 195 && deg <= 255) return "SW"
-
-    if (deg > 255 && deg <= 285) return "W"
-    if (deg > 285 && deg <= 345) return "NW"
-
-    return "N"
+export const getWindDirection = (value: number): string => {
+    switch (true) {
+        case value > 15 && value <= 75:
+            return "NE"
+        case value > 76 && value <= 105:
+            return "E"
+        case value > 105 && value <= 165:
+            return "SE"
+        case value > 166 && value <= 195:
+            return "S"
+        case value > 195 && value <= 255:
+            return "SW"
+        case value > 255 && value <= 285:
+            return "W"
+        case value > 285 && value <= 345:
+            return "NW"
+        default:
+            return "N"
+    }
 }
 
 export const getHumidityValue = (level: number): string => {
@@ -22,9 +28,9 @@ export const getHumidityValue = (level: number): string => {
 
 export const getVisibilityValue = (number: number): string => {
     if (number <= 50) return "Dangerously foggy"
-    if (number > 50 && number <= 500) return "Expect heavy fog"
-    if (number > 500 && number <= 2000) return "Expect some fog"
-    if (number > 2000 && number <= 9000) return "Expect some haze"
+    if (number <= 500) return "Expect heavy fog"
+    if (number <= 2000) return "Expect some fog"
+    if (number <= 9000) return "Expect some haze"
 
     return "Very clear day"
 }
